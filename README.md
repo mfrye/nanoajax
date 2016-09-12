@@ -84,14 +84,10 @@ The following parameters are passed directly onto the request object:
 
 Callback function prototype:
 
-- `statusCode`: integer status or null
-    + if request errors for some browsers (notably Chrome), this is 0 (and `response` is "Error")
-- `response`:
-    + if `responseType` set and supported by browser, this is an object of some type (see docs)
-    + otherwise if request completed, this is the string text of the response
-    + if request is aborted, this is `"Abort"`
-    + if request times out, this is `"Timeout"`
-    + if request errors before completing (probably a CORS issue), this is `"Error"`
+- `err`: error or null
+    + Returns responseText or tries to parse json
+- `body`:
+    Returns responseText or tries to parse json
 - request object
 
 Returns the request object. So you can call .abort() or other methods

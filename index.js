@@ -64,10 +64,10 @@ exports.ajax = function (params, callback) {
         data = data || res;
 
         if (code !== 200) {
-          return callback(data, null);
+          return callback(data, null, req);
         }
 
-        callback(null, data);
+        callback(null, data, req);
         called = true
       }
     }
