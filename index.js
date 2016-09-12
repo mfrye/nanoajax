@@ -56,19 +56,20 @@ exports.ajax = function (params, callback) {
         var code = req.status === undefined ? statusCode : req.status;
         var res = req.status === 0 ? "Error" : (req.response || req.responseText || responseText);
         var data;
+        called = true;
 
+        // Try to parse json res
         try {
           data = JSON.parse(res);
-        } catch (e) {}
+        } catch (e) {
+          data = res;
+        }
 
-        data = data || res;
-
-        if (code !== 200) {
+        if (!code || code >= 400) {
           return callback(data, null, req);
         }
 
         callback(null, data, req);
-        called = true
       }
     }
   }
