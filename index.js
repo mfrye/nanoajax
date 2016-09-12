@@ -61,7 +61,7 @@ exports.ajax = function (params, callback) {
           data = JSON.parse(res);
         } catch (e) {}
 
-        data = data || responseText;
+        data = data || res;
 
         if (code !== 200) {
           return callback(data, null);
