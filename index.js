@@ -53,9 +53,21 @@ exports.ajax = function (params, callback) {
   function cb(statusCode, responseText) {
     return function () {
       if (!called) {
-        callback(req.status === undefined ? statusCode : req.status,
-                 req.status === 0 ? "Error" : (req.response || req.responseText || responseText),
-                 req)
+        var code = req.status === undefined ? statusCode : req.status;
+        var res = req.status === 0 ? "Error" : (req.response || req.responseText || responseText);
+        var data;
+
+        try {
+          data = JSON.parse(res);
+        } catch (e) {}
+
+        data = data || responseText;
+
+        if (code !== 200) {
+          return callback(data, null);
+        }
+
+        callback(null, data);
         called = true
       }
     }
@@ -72,7 +84,7 @@ exports.ajax = function (params, callback) {
   req.onabort = cb(null, 'Abort')
 
   if (body) {
-    setDefault(headers, 'X-Requested-With', 'XMLHttpRequest')
+    // setDefault(headers, 'X-Requested-With', 'XMLHttpRequest')
 
     if (!global.FormData || !(body instanceof global.FormData)) {
       setDefault(headers, 'Content-Type', 'application/x-www-form-urlencoded')
